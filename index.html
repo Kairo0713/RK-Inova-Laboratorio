@@ -473,6 +473,12 @@
   @media (max-width:768px){
     html, body{ overflow-x:hidden; }
 
+    /* iOS dá zoom automático em campos com fonte menor que 16px — isso é o que
+       estava fazendo a tela "aumentar" ao tocar num campo. Forçamos 16px aqui. */
+    .field input, .field select, .field textarea{
+      font-size:16px;
+    }
+
     body{ flex-direction:column; }
 
     /* ---- Barra mobile fixa no topo: hamburguer + marca + avatar ---- */
@@ -683,6 +689,36 @@
     table.data-table{ font-size:12px; }
     .panel{ padding:12px; }
     .app{ padding:10px; }
+  }
+
+  /* Celulares bem pequenos/compactos (iPhone SE, Androids de entrada, etc.) */
+  @media (max-width:400px){
+    .mobile-topbar{ padding:9px 12px; gap:8px; }
+    .mobile-menu-btn{ width:33px; height:33px; font-size:17px; }
+    .mobile-topbar-brand{ font-size:14px; }
+    .mobile-topbar-user .user-avatar{ width:26px; height:26px; font-size:11px; }
+
+    .sidebar{ width:86%; padding:20px 14px; }
+    .tab-btn{ font-size:13px; padding:10px 10px; }
+
+    .app{ padding:8px; }
+    .panel{ padding:10px; }
+    .panel h2{ font-size:15px; }
+    .panel .hint{ font-size:11.5px; }
+
+    .field label{ font-size:11px; }
+    .submit-btn{ padding:10px 16px; font-size:13px; }
+
+    .card-grid{ gap:8px; }
+    .card{ padding:10px; }
+    .card .card-num{ font-size:18px; }
+    .card .card-label{ font-size:10.5px; }
+
+    table.data-table{ min-width:560px; font-size:11.5px; }
+    table.data-table th, table.data-table td{ padding:6px; }
+
+    .login-box{ padding:22px 18px; }
+    .login-box img{ height:70px; }
   }
 </style>
 </head>
