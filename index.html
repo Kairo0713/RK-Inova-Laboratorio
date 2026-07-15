@@ -480,6 +480,14 @@
       font-size:16px;
     }
 
+    .sidebar-user{ margin-top:18px; padding-top:16px; }
+
+  /* Ajuste fino do bloco Usuários + usuário logado no menu mobile */
+  .sidebar > div[style*="margin-top:auto"]{
+    margin-top:auto;
+    padding-bottom:12px;
+  }
+
     body{ flex-direction:column; }
 
     /* ---- Barra mobile fixa no topo: hamburguer + marca + avatar ---- */
@@ -720,6 +728,11 @@
 
     .login-box{ padding:22px 18px; }
     .login-box img{ height:70px; }
+    .sidebar > div[style*="margin-top:auto"]{
+    padding-bottom:8px;
+  }
+  .sidebar-user{ margin-top:14px !important; }
+
   }
 </style>
 </head>
