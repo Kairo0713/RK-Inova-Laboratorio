@@ -40,20 +40,21 @@
     display:flex;
   }
 
-  .sidebar{
-    width:230px;
-    flex-shrink:0;
-    background:#1F2937;
-    padding:32px 20px;
-    color: #ffffff;
-    min-height:100vh;
-    position:fixed;
-    top:0;
-    left:0;
-    height:100vh;
-    overflow-y:auto;
-  }
-
+.sidebar{
+  width:230px;
+  flex-shrink:0;
+  background:#1F2937;
+  padding:32px 20px;
+  color: #ffffff;
+  min-height:100vh;
+  position:fixed;
+  top:0;
+  left:0;
+  height:100vh;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
   .app{
     flex:1;
     color:white;
@@ -935,18 +936,29 @@
     <button class="tab-btn" data-tab="solicitacao">📝 Solicitações</button>
     <button class="tab-btn" data-tab="historico">⏳ Histórico</button>
     <button class="tab-btn" data-tab="relatorio">📈 Relatórios</button>
-    <br><br><br><br><br><br><br><br><br><br><button class="tab-btn admin-only" data-tab="usuarios">👤 Usuários</button>
   </div>
 
-  <div class="sidebar-user">
-    <div class="user-info">
-      <div class="user-avatar" id="sidebarUserAvatar">?</div>
-      <div class="user-details">
-        <span class="u-name" id="sidebarUserName">—</span>
-        <span class="u-role" id="sidebarUserRole"></span>
-      </div>
+  <div style="margin-top:auto;">
+    <div class="tabs" style="padding-top:14px;border-top:1px solid rgba(255,255,255,0.15);">
+      <button class="tab-btn admin-only" data-tab="usuarios">👤 Usuários</button>
     </div>
-    <button type="button" id="btnLogout">Sair</button>
+
+    <div class="sidebar-user" style="margin-top:18px;">
+      <div class="user-info">
+        <div class="user-avatar" id="sidebarUserAvatar">?</div>
+        <div class="user-details">
+          <span class="u-name" id="sidebarUserName">—</span>
+          <span class="u-role" id="sidebarUserRole"></span>
+        </div>
+      </div>
+      <button type="button" id="btnLogout">Sair</button>
+    </div>
+  </div>
+</div>  
+</div>
+
+  <div class="tabs" style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.15);">
+    <button class="tab-btn admin-only" data-tab="usuarios">👤 Usuários</button>
   </div>
 </div>  
 </div>
