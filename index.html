@@ -820,8 +820,10 @@
       <label for="fe_tipo">Tipo de solicitação</label>
       <select id="fe_tipo">
         <option value="Acerto de cor">Acerto de cor</option>
-        <option value="Nova fórmula">Nova fórmula</option>
-        <option value="Teste">Teste</option>
+        <option value="Nova fórmula">Desenvolvimento</option>
+        <option value="Teste">Teste (Engraxante)</option>
+        <option value="Teste Resina">Teste (Resina)</option>
+        <option value="Teste Tanino">Teste (Tanino)</option>
         <option value="Repetição de lote">Repetição de lote</option>
         <option value="Outro">Outro</option>
       </select>
@@ -851,7 +853,9 @@
 
     <div class="field">
       <label for="fe_tecnico">Técnico</label>
-      <input type="text" id="fe_tecnico" placeholder="Ex: João">
+      <select id="fe_tecnico">
+        <option value="">— Selecione um técnico —</option>
+      </select>
     </div>
 
     <div class="field">
@@ -1003,6 +1007,50 @@
   </div>
 </div>
 
+<div id="modalOverlayServico" style="display:none;position:fixed;inset:0;background:rgba(30,42,40,0.45);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:28px;width:100%;max-width:460px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:85vh;overflow-y:auto;">
+    <h2 style="margin:0 0 4px 0;font-size:17px;font-family:Georgia,'Times New Roman',serif;color:var(--pine);">Editar serviço</h2>
+    <p class="hint">Atualize os dados do serviço.</p>
+
+    <div class="field">
+      <label for="se_cliente">Nome do Cliente</label>
+      <input type="text" id="se_cliente" required placeholder="Empresa">
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label for="se_tipo">Tipo de serviço</label>
+        <input type="text" id="se_tipo" required placeholder="Ex: Aplicação de fórmula">
+      </div>
+      <div class="field">
+        <label for="se_data">Data</label>
+        <input type="date" id="se_data">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="se_status">Status</label>
+      <select id="se_status">
+        <option value="Pendente">Pendente</option>
+        <option value="Em andamento">Em andamento</option>
+        <option value="Concluído">Concluído</option>
+        <option value="Cancelado">Cancelado</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="se_obs">Observações</label>
+      <textarea id="se_obs"></textarea>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button type="button" class="submit-btn" id="btnSalvarEdicaoServico">Salvar alterações</button>
+      <button type="button" class="submit-btn" id="btnCancelarEdicaoServico" style="background:#8A938F;">Cancelar</button>
+    </div>
+    <div class="msg" id="msgEdicaoServico"></div>
+  </div>
+</div>
+
 <div class="mobile-topbar">
   <div class="mobile-topbar-left">
     <button type="button" class="mobile-menu-btn" id="btnAbrirMenuMobile" aria-label="Abrir menu">☰</button>
@@ -1027,6 +1075,7 @@
     <button class="tab-btn" data-tab="produto">🧴 Produtos ou <br>Materia Prima</button>
     <button class="tab-btn" data-tab="formula">🧪 Fórmulas</button>
     <button class="tab-btn" data-tab="arquivoformula">📁 Arquivo de Fórmulas</button>
+    <button class="tab-btn" data-tab="fichatecnica">ℹ️ Fichas Tecnicas</button>
     <button class="tab-btn" data-tab="servico">💼 Serviços/Trabalhos</button>
     <button class="tab-btn" data-tab="solicitacao">📝 Solicitações</button>
     <button class="tab-btn" data-tab="historico">⏳ Histórico</button>
@@ -1205,8 +1254,6 @@
 </div>
 </div>
 
-
-
 <!-- ================= FORMULA ================= -->
 <div class="panel" id="panel-formula">
   <h2>Fórmulas</h2>
@@ -1215,7 +1262,7 @@
   <form id="formFormula">
     <div class="field">
       <label for="f_nome">Nome da fórmula</label>
-      <input type="text" id="f_nome" required placeholder="Ex: Fórmula Base Sérum V2">
+      <input type="text" id="f_nome" required placeholder="Ex: Fórmula Base Nobuck">
     </div>
 
     <div class="field">
@@ -1229,8 +1276,10 @@
       <label for="f_tipo">Tipo de solicitação</label>
       <select id="f_tipo">
         <option value="Acerto de cor">Acerto de cor</option>
-        <option value="Nova fórmula">Nova fórmula</option>
-        <option value="Teste">Teste</option>
+        <option value="Nova fórmula">Desenvolvimento</option>
+        <option value="Teste">Teste (Engraxante)</option>
+        <option value="Teste Resina">Teste (Resina)</option>
+        <option value="Teste Tanino">Teste (Tanino)</option>
         <option value="Repetição de lote">Repetição de lote</option>
         <option value="Outro">Outro</option>
       </select>
@@ -1261,7 +1310,9 @@
 
     <div class="field">
       <label for="f_tecnico">Técnico</label>
-      <input type="text" id="f_tecnico" placeholder="Ex: João">
+      <select id="f_tecnico">
+        <option value="">— Selecione um técnico —</option>
+      </select>
     </div>
 
     <div class="field">
@@ -1299,10 +1350,49 @@
     <input type="text" id="af_busca" placeholder="Buscar por nome da fórmula...">
   </div>
 
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap;">
+    <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:#5B6663;">
+      <input type="checkbox" id="af_selecionar_todas"> Selecionar todas
+    </label>
+    <button type="button" class="submit-btn" style="background:#2A5A7A;" id="btnImprimirEtiquetasMassa">🖨️ Imprimir etiquetas selecionadas</button>
+  </div>
+
   <div class="list-section" style="margin-top:0;padding-top:0;border-top:none;">
     <table class="data-table">
-      <thead><tr><th>Fórmula</th><th>Produtos</th><th>Ações</th></tr></thead>
-      <tbody id="listFormulas"><tr class="empty-row"><td colspan="3">Carregando…</td></tr></tbody>
+      <thead><tr><th style="width:30px;"></th><th>Fórmula</th><th>Produtos</th><th>Ações</th></tr></thead>
+      <tbody id="listFormulas"><tr class="empty-row"><td colspan="4">Carregando…</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ================= FICHA TECNICA ================= -->
+<div class="panel" id="panel-fichatecnica">
+  <h2>Fichas Técnicas</h2>
+  <p class="hint">Importe (upload) e exporte (download) fichas técnicas — PDF, Word, Excel, imagem, etc.</p>
+
+  <form id="formFichaTecnica">
+    <div class="row-2">
+      <div class="field">
+        <label for="ft_nome">Nome da ficha</label>
+        <input type="text" id="ft_nome" required placeholder="Ex: Ficha técnica - Sódio">
+      </div>
+      <div class="field">
+        <label for="ft_arquivo">Arquivo</label>
+        <input type="file" id="ft_arquivo" required>
+      </div>
+    </div>
+    <button type="submit" class="submit-btn">Importar ficha técnica</button>
+    <div class="msg" id="msgFichaTecnica"></div>
+  </form>
+
+  <div class="list-section">
+    <h3>Fichas técnicas cadastradas</h3>
+    <div class="field" style="max-width:320px;">
+      <input type="text" id="ft_busca" placeholder="Buscar por nome...">
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Nome</th><th>Arquivo</th><th>Tamanho</th><th>Enviado em</th><th>Ações</th></tr></thead>
+      <tbody id="listFichasTecnicas"><tr class="empty-row"><td colspan="5">Carregando…</td></tr></tbody>
     </table>
   </div>
 </div>
@@ -1312,48 +1402,17 @@
     <h2>Serviços / Trabalhos</h2>
     <p class="hint">Registre um serviço ou trabalho realizado para um cliente.</p>
 
-    <form id="formServico">
-      <div class="field">
-        <label for="s_email">Nome do Cliente</label>
-        <input type="text" id="s_email" placeholder="Empresa">
-      </div>
-
-      <div class="row-2">
-        <div class="field">
-          <label for="s_tipo">Tipo de serviço</label>
-          <input type="text" id="s_tipo" required placeholder="Ex: Aplicação de fórmula">
-        </div>
-        <div class="field">
-          <label for="s_data">Data</label>
-          <input type="date" id="s_data">
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="s_status">Status</label>
-        <select id="s_status">
-          <option value="Pendente">Pendente</option>
-          <option value="Em andamento">Em andamento</option>
-          <option value="Concluído">Concluído</option>
-          <option value="Cancelado">Cancelado</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="s_obs">Observações</label>
-        <textarea id="s_obs" placeholder="Detalhes adicionais..."></textarea>
-      </div>
-
-      <button type="submit" class="submit-btn">Salvar serviço</button>
-      <div class="msg" id="msgServico"></div>
-    </form>
-
+    
     <div class="list-section">
       <h3>Serviços registrados</h3>
+      <div class="field" style="max-width:320px;">
+        <input type="text" id="s_busca" placeholder="Buscar por cliente, tipo ou status...">
+      </div>
       <table class="data-table">
-        <thead><tr><th>Cliente</th><th>Tipo</th><th>Data</th><th>Status</th><th>Observação</th><th>Fórmula</th></tr></thead>
-        <tbody id="listServicos"><tr class="empty-row"><td colspan="6">Carregando…</td></tr></tbody>
-      </table>    </div>
+        <thead><tr><th>Cliente</th><th>Tipo</th><th>Data</th><th>Status</th><th>Observação</th><th>Fórmula</th><th>Ações</th></tr></thead>
+        <tbody id="listServicos"><tr class="empty-row"><td colspan="7">Carregando…</td></tr></tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ================= SOLICITACAO ================= -->
@@ -1398,8 +1457,10 @@
           <label for="sol_tipo">Tipo de solicitação</label>
           <select id="sol_tipo">
             <option value="Acerto de cor">Acerto de cor</option>
-            <option value="Nova fórmula">Nova fórmula</option>
-            <option value="Teste">Teste</option>
+            <option value="Nova fórmula">Desenvolvimento</option>
+            <option value="Teste">Teste (Engraxante)</option>
+            <option value="Teste Resina">Teste (Resina)</option>
+            <option value="Teste Tanino">Teste (Tanino)</option>
             <option value="Repetição de lote">Repetição de lote</option>
             <option value="Outro">Outro</option>
           </select>
@@ -1453,11 +1514,11 @@
         <label for="rel_data_fim">Período — até</label>
         <input type="date" id="rel_data_fim">
       </div>
-      <div style="display:flex;gap:8px;">
+<div style="display:flex;gap:8px;">
         <button type="button" class="submit-btn" id="btnFiltrarRelatorio">Filtrar</button>
         <button type="button" class="submit-btn" id="btnLimparFiltroRelatorio" style="background:#8A938F;">Limpar</button>
       </div>
-    </div>
+        </div>
     <p class="hint" id="rel_periodo_ativo" style="margin-top:10px;"></p>
 
     <div class="rel-subtabs" id="relSubtabs">
@@ -1465,14 +1526,11 @@
       <button type="button" class="rel-subtab-btn" data-relsub="trab-tecnico">Trabalhos por técnico</button>
       <button type="button" class="rel-subtab-btn" data-relsub="trab-mes">Trabalhos no mês</button>
       <button type="button" class="rel-subtab-btn" data-relsub="serv-status">Serviços por status</button>
-      <button type="button" class="rel-subtab-btn" data-relsub="ped-status">Pedidos por status</button>
-      <button type="button" class="rel-subtab-btn" data-relsub="prod-categoria">Produtos por categoria</button>
     </div>
 
     <div class="rel-subpanel active" id="relsub-sol-cliente">
       <div class="list-section" style="margin-top:0;padding-top:0;border-top:none;">
-        <h3>Solicitações por cliente</h3>
-        <table class="data-table">
+          <h3>Solicitações por cliente <button type="button" class="submit-btn" style="padding:3px 10px;font-size:11px;background:var(--gold);margin-left:8px;" onclick="imprimirRelatorio('Solicitações por cliente','listSolicitacoesPorCliente','Cliente')">Imprimir PDF</button></h3>        <table class="data-table">
           <thead><tr><th>Cliente</th><th>Qtd.</th></tr></thead>
           <tbody id="listSolicitacoesPorCliente"><tr class="empty-row"><td colspan="2">Carregando…</td></tr></tbody>
         </table>
@@ -1481,7 +1539,7 @@
 
     <div class="rel-subpanel" id="relsub-trab-tecnico">
       <div class="list-section" style="margin-top:0;padding-top:0;border-top:none;">
-        <h3>Trabalhos por técnico</h3>
+        <h3>Trabalhos por técnico <button type="button" class="submit-btn" style="padding:3px 10px;font-size:11px;background:var(--gold);margin-left:8px;" onclick="imprimirRelatorio('Trabalhos por técnico','listTrabalhosPorTecnico')">Imprimir PDF</button></h3>
         <table class="data-table">
           <thead><tr><th>Técnico</th><th>Qtd.</th></tr></thead>
           <tbody id="listTrabalhosPorTecnico"><tr class="empty-row"><td colspan="2">Carregando…</td></tr></tbody>
@@ -1491,7 +1549,7 @@
 
     <div class="rel-subpanel" id="relsub-trab-mes">
       <div class="list-section" style="margin-top:0;padding-top:0;border-top:none;">
-        <h3>Trabalhos no mês</h3>
+        <h3>Trabalhos no mês <button type="button" class="submit-btn" style="padding:3px 10px;font-size:11px;background:var(--gold);margin-left:8px;" onclick="imprimirRelatorio('Trabalhos no mês','listTrabalhosPorMes')">Imprimir PDF</button></h3>
         <table class="data-table">
           <thead><tr><th>Mês</th><th>Qtd.</th></tr></thead>
           <tbody id="listTrabalhosPorMes"><tr class="empty-row"><td colspan="2">Carregando…</td></tr></tbody>
@@ -1501,7 +1559,7 @@
 
     <div class="rel-subpanel" id="relsub-serv-status">
       <div class="list-section" style="margin-top:0;padding-top:0;border-top:none;">
-        <h3>Serviços por status</h3>
+        <h3>Serviços por status <button type="button" class="submit-btn" style="padding:3px 10px;font-size:11px;background:var(--gold);margin-left:8px;" onclick="imprimirRelatorio('Serviços por status','listServicosPorStatus','Status')">Imprimir PDF</button></h3>
         <table class="data-table">
           <thead><tr><th>Status</th><th>Qtd.</th></tr></thead>
           <tbody id="listServicosPorStatus"><tr class="empty-row"><td colspan="2">Carregando…</td></tr></tbody>
@@ -1511,7 +1569,7 @@
 
     <div class="rel-subpanel" id="relsub-ped-status">
       <div class="list-section" style="margin-top:0;padding-top:0;border-top:none;">
-        <h3>Pedidos por status</h3>
+        <h3>Pedidos por status <button type="button" class="submit-btn" style="padding:3px 10px;font-size:11px;background:var(--gold);margin-left:8px;" onclick="imprimirRelatorio('Pedidos por status','listPedidosPorStatus','Status')">Imprimir PDF</button></h3>
         <table class="data-table">
           <thead><tr><th>Status</th><th>Qtd.</th></tr></thead>
           <tbody id="listPedidosPorStatus"><tr class="empty-row"><td colspan="2">Carregando…</td></tr></tbody>
@@ -1521,7 +1579,7 @@
 
     <div class="rel-subpanel" id="relsub-prod-categoria">
       <div class="list-section" style="margin-top:0;padding-top:0;border-top:none;">
-        <h3>Produtos por categoria</h3>
+        <h3>Produtos por categoria <button type="button" class="submit-btn" style="padding:3px 10px;font-size:11px;background:var(--gold);margin-left:8px;" onclick="imprimirRelatorio('Produtos por categoria','listProdutosPorCategoria','Categoria')">Imprimir PDF</button></h3>
         <table class="data-table">
           <thead><tr><th>Categoria</th><th>Qtd.</th></tr></thead>
           <tbody id="listProdutosPorCategoria"><tr class="empty-row"><td colspan="2">Carregando…</td></tr></tbody>
@@ -1600,6 +1658,7 @@ const TODAS_AS_ABAS = [
   { id: "produto",        label: "Produtos ou Matéria Prima" },
   { id: "formula",        label: "Fórmulas" },
   { id: "arquivoformula", label: "Arquivo de Fórmulas" },
+  { id: "fichatecnica", label: "Fichas Tecnicas" },
   { id: "servico",        label: "Serviços/Trabalhos" },
   { id: "solicitacao",    label: "Solicitações" },
   { id: "historico",      label: "Histórico" },
@@ -1619,6 +1678,7 @@ const tabRefreshers = {
   produto: loadProdutos,
   formula: loadFormulaTab,
   arquivoformula: loadArquivoFormulas,
+  fichatecnica: loadFichaTecnica,
   servico: loadServicos,
   solicitacao: loadSolicitacoes,
   historico: loadHistorico,
@@ -2161,6 +2221,34 @@ let formulasCache = [];
 let editandoFormulaId = null;
 let produtosParaSelect = [];
 
+function gerarPrefixoTecnico(tecnico) {
+  const semAcento = (tecnico || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z]/g, "")
+    .toUpperCase();
+  return (semAcento.slice(0, 3) || "GER").padEnd(3, "X");
+}
+
+async function gerarCodigoFormula(tecnico) {
+  const prefixo = gerarPrefixoTecnico(tecnico);
+
+  const { data, error } = await supabaseClient
+    .from("formulas")
+    .select("codigo")
+    .ilike("codigo", prefixo + "-%")
+    .order("codigo", { ascending: false })
+    .limit(1);
+
+  let proximoNumero = 1;
+  if (!error && data && data.length && data[0].codigo) {
+    const ultimoNumero = parseInt(data[0].codigo.split("-")[1], 10);
+    if (!isNaN(ultimoNumero)) proximoNumero = ultimoNumero + 1;
+  }
+
+  return prefixo + "-" + String(proximoNumero).padStart(3, "0");
+}
+
 function criarLinhaProdutoEtapa(tbody, produto = {}) {
   const tr = document.createElement("tr");
   tr.innerHTML = `
@@ -2346,7 +2434,7 @@ function abrirVisualizarFormula(id) {
   const etapas = Array.isArray(f.itens) ? f.itens : [];
 
   const clienteNomeView = nomeClientePorId(f.cliente_id);
-  document.getElementById("vf_titulo").textContent = f.nome_formula || "Fórmula";
+  document.getElementById("vf_titulo").textContent = (f.codigo ? f.codigo + " — " : "") + (f.nome_formula || "Fórmula");
   document.getElementById("vf_conteudo").innerHTML =
     (clienteNomeView ? `<p class="hint" style="margin-top:-8px;">Cliente: ${escapeHtml(clienteNomeView)}</p>` : "") +
     (f.tipo ? `<p class="hint" style="margin-top:-8px;">Tipo: ${escapeHtml(f.tipo)}</p>` : "") +
@@ -2404,6 +2492,19 @@ async function carregarProdutosParaSelect() {
 }
 
 let clientesParaSelect = [];
+let tecnicosParaSelect = [];
+
+async function carregarTecnicosParaSelect() {
+  tecnicosParaSelect = await fetchTable("tecnicos", "nome", true);
+  ["f_tecnico", "fe_tecnico"].forEach(id => {
+    const select = document.getElementById(id);
+    if (!select) return;
+    const current = select.value;
+    select.innerHTML = '<option value="">— Selecione um técnico —</option>' +
+      tecnicosParaSelect.map(t => `<option value="${escapeHtml(t.nome)}">${escapeHtml(t.nome)}</option>`).join("");
+    select.value = current;
+  });
+}
 
 async function carregarClientesParaSelect() {
   clientesParaSelect = await fetchTable("clientes", "nome", true);
@@ -2442,8 +2543,11 @@ formFormula.addEventListener("submit", async (e) => {
 
   const espessura = document.getElementById("f_espessura").value;
   const espessuraRebaix = document.getElementById("f_espessura_rebaix").value;
+  const tecnico = document.getElementById("f_tecnico").value.trim() || null;
+  const codigo = await gerarCodigoFormula(tecnico);
 
 const payload = {
+    codigo: codigo,
     nome_formula: document.getElementById("f_nome").value.trim(),
     cliente_id: document.getElementById("f_cliente").value || null,
     tipo: document.getElementById("f_tipo").value,
@@ -2451,7 +2555,7 @@ const payload = {
     cor: document.getElementById("f_cor").value.trim() || null,
     espessura: espessura ? parseFloat(espessura) : null,
     espessura_rebaix: espessuraRebaix ? parseFloat(espessuraRebaix) : null,
-    tecnico: document.getElementById("f_tecnico").value.trim() || null,
+    tecnico: tecnico,
     peso_couro: pesoCouro ? parseFloat(pesoCouro) : null,
     itens: etapas,
     tempo_final: document.getElementById("f_tempo_final").value.trim() || null,
@@ -2492,6 +2596,7 @@ async function carregarFormulasCache() {
 async function loadFormulaTab() {
   await carregarProdutosParaSelect();
   await carregarClientesParaSelect();
+  await carregarTecnicosParaSelect();
   const container = document.getElementById("itensFormulaContainer");
   if (!container.children.length) criarEtapa(container, {}, "f_peso_couro");
 }
@@ -2501,23 +2606,220 @@ async function loadArquivoFormulas() {
   renderFormulas();
 }
 
+/* ---------------- Fichas Técnicas ---------------- */
+const formFichaTecnica = document.getElementById("formFichaTecnica");
+const msgFichaTecnica = document.getElementById("msgFichaTecnica");
+document.getElementById("ft_busca").addEventListener("input", renderFichasTecnicas);
+
+let fichasTecnicasCache = [];
+
+formFichaTecnica.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!isConfigured) { showMsg(msgFichaTecnica, "Configure o Supabase no código antes de salvar.", "err"); return; }
+
+  const btn = formFichaTecnica.querySelector(".submit-btn");
+  btn.disabled = true;
+
+  const nome = document.getElementById("ft_nome").value.trim();
+  const arquivo = document.getElementById("ft_arquivo").files[0];
+
+  if (!arquivo) {
+    showMsg(msgFichaTecnica, "Selecione um arquivo.", "err");
+    btn.disabled = false;
+    return;
+  }
+
+  const caminho = Date.now() + "_" + arquivo.name;
+
+  const { error: errUpload } = await supabaseClient.storage.from("fichas-tecnicas").upload(caminho, arquivo);
+  if (errUpload) {
+    showMsg(msgFichaTecnica, "Erro ao enviar arquivo: " + errUpload.message, "err");
+    btn.disabled = false;
+    return;
+  }
+
+  const payload = {
+    nome,
+    nome_arquivo: arquivo.name,
+    caminho_arquivo: caminho,
+    tipo_arquivo: arquivo.type || null,
+    tamanho: arquivo.size,
+    criado_por: nomeUsuarioAtual()
+  };
+
+  const { error } = await supabaseClient.from("fichas_tecnicas").insert([payload]);
+  btn.disabled = false;
+
+  if (error) {
+    showMsg(msgFichaTecnica, "Erro ao salvar: " + error.message, "err");
+  } else {
+    showMsg(msgFichaTecnica, "Ficha técnica importada com sucesso!", "ok");
+    formFichaTecnica.reset();
+    loadFichaTecnica();
+  }
+});
+
+async function loadFichaTecnica() {
+  fichasTecnicasCache = await fetchTable("fichas_tecnicas");
+  renderFichasTecnicas();
+}
+
+function formatarTamanho(bytes) {
+  if (!bytes) return "—";
+  const kb = bytes / 1024;
+  if (kb < 1024) return kb.toFixed(1) + " KB";
+  return (kb / 1024).toFixed(2) + " MB";
+}
+
+function renderFichasTecnicas() {
+  const tbody = document.getElementById("listFichasTecnicas");
+  const termo = (document.getElementById("ft_busca").value || "").toLowerCase().trim();
+
+  const data = !termo ? fichasTecnicasCache : fichasTecnicasCache.filter(f =>
+    (f.nome || "").toLowerCase().includes(termo) ||
+    (f.nome_arquivo || "").toLowerCase().includes(termo)
+  );
+
+  if (!data.length) return renderEmpty(tbody, 5, termo ? "Nenhuma ficha técnica encontrada." : "Nenhuma ficha técnica cadastrada ainda.");
+
+  tbody.innerHTML = data.map(f => `
+    <tr>
+      <td>${escapeHtml(f.nome)}</td>
+      <td>${escapeHtml(f.nome_arquivo)}</td>
+      <td>${formatarTamanho(f.tamanho)}</td>
+      <td>${formatDate(f.created_at)}</td>
+      <td>
+        <button type="button" class="submit-btn" style="padding:5px 10px;font-size:12px;background:#2A5A7A;" onclick="visualizarFichaTecnica('${f.id}')">Visualizar</button>
+        <button type="button" class="submit-btn" style="padding:5px 10px;font-size:12px;background:var(--gold);" onclick="exportarFichaTecnica('${f.id}')">Baixar</button>
+        <button type="button" class="submit-btn" style="padding:5px 10px;font-size:12px;background:var(--danger);margin-left:6px;" onclick="excluirFichaTecnica('${f.id}')">Excluir</button>      </td>
+    </tr>
+  `).join("");
+}
+
+async function visualizarFichaTecnica(id) {
+  const f = fichasTecnicasCache.find(x => String(x.id) === String(id));
+  if (!f) return;
+
+  const { data, error } = await supabaseClient.storage
+    .from("fichas-tecnicas")
+    .createSignedUrl(f.caminho_arquivo, 300); // link válido por 5 minutos
+
+  if (error) { alert("Erro ao gerar link de visualização: " + error.message); return; }
+
+  const tipo = f.tipo_arquivo || "";
+  const urlArquivo = data.signedUrl;
+
+  let urlParaAbrir = urlArquivo;
+
+  // Word, Excel, PowerPoint: usa o Google Docs Viewer para renderizar no navegador
+  const tiposOffice = [
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  ];
+
+  if (tiposOffice.includes(tipo)) {
+    urlParaAbrir = "https://docs.google.com/viewer?url=" + encodeURIComponent(urlArquivo) + "&embedded=true";
+  }
+  // PDF e imagens: o navegador já exibe nativamente ao abrir a signedUrl direto
+
+  const win = window.open(urlParaAbrir, "_blank");
+  if (!win) {
+    alert("O navegador bloqueou a abertura da ficha. Permita pop-ups para este site e tente novamente.");
+  }
+}
+
+window.visualizarFichaTecnica = visualizarFichaTecnica;
+
+
+async function exportarFichaTecnica(id) {
+  const f = fichasTecnicasCache.find(x => String(x.id) === String(id));
+  if (!f) return;
+
+  const { data, error } = await supabaseClient.storage.from("fichas-tecnicas").download(f.caminho_arquivo);
+  if (error) { alert("Erro ao baixar arquivo: " + error.message); return; }
+
+  const url = URL.createObjectURL(data);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = f.nome_arquivo;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function imprimirFichaTecnica(id) {
+  const f = fichasTecnicasCache.find(x => String(x.id) === String(id));
+  if (!f) return;
+
+  const { data, error } = await supabaseClient.storage.from("fichas-tecnicas").download(f.caminho_arquivo);
+  if (error) { alert("Erro ao abrir arquivo: " + error.message); return; }
+
+  const url = URL.createObjectURL(data);
+  const win = window.open(url, "_blank");
+
+  if (!win) {
+    alert("O navegador bloqueou a abertura da ficha. Permita pop-ups para este site e tente novamente.");
+    URL.revokeObjectURL(url);
+    return;
+  }
+
+  const tipo = f.tipo_arquivo || "";
+  if (tipo.includes("pdf") || tipo.includes("image")) {
+    win.onload = () => {
+      win.focus();
+      win.print();
+    };
+  }
+
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+window.imprimirFichaTecnica = imprimirFichaTecnica;
+
+
+async function excluirFichaTecnica(id) {
+  if (!confirm("Tem certeza que deseja excluir esta ficha técnica?")) return;
+  const f = fichasTecnicasCache.find(x => String(x.id) === String(id));
+
+  if (f) await supabaseClient.storage.from("fichas-tecnicas").remove([f.caminho_arquivo]);
+
+  const { error } = await supabaseClient.from("fichas_tecnicas").delete().eq("id", id);
+  if (error) {
+    alert("Erro ao excluir: " + error.message);
+  } else {
+    loadFichaTecnica();
+  }
+}
+
+window.exportarFichaTecnica = exportarFichaTecnica;
+window.excluirFichaTecnica = excluirFichaTecnica;
+
+
 function renderFormulas() {
   const tbody = document.getElementById("listFormulas");
   const termoEl = document.getElementById("af_busca");
   const termo = termoEl ? termoEl.value.toLowerCase().trim() : "";
 
   const data = !termo ? formulasCache : formulasCache.filter(f =>
-    (f.nome_formula || "").toLowerCase().includes(termo)
+    (f.nome_formula || "").toLowerCase().includes(termo) ||
+    (f.codigo || "").toLowerCase().includes(termo)
   );
 
-  if (!data.length) return renderEmpty(tbody, 3, termo ? "Nenhuma fórmula encontrada." : "Nenhuma fórmula cadastrada ainda.");
+  if (!data.length) return renderEmpty(tbody, 4, termo ? "Nenhuma fórmula encontrada." : "Nenhuma fórmula cadastrada ainda.");
 
   tbody.innerHTML = data.map(f => {
     const etapas = Array.isArray(f.itens) ? f.itens : [];
     const clienteNome = nomeClientePorId(f.cliente_id);
     return `
       <tr>
+        <td><input type="checkbox" class="chk-etiqueta-formula" value="${f.id}"></td>
         <td>
+          ${f.codigo ? `<div style="font-size:11px;font-weight:600;color:var(--gold);letter-spacing:0.3px;margin-bottom:2px;">${escapeHtml(f.codigo)}</div>` : ""}
           ${escapeHtml(f.nome_formula)}
           ${clienteNome ? `<div style="font-size:11px;color:#8A938F;margin-top:2px;">Cliente: ${escapeHtml(clienteNome)}</div>` : ""}
           ${f.tipo ? `<div style="font-size:11px;color:#8A938F;margin-top:2px;">Tipo: ${escapeHtml(f.tipo)}</div>` : ""}
@@ -2534,6 +2836,7 @@ function renderFormulas() {
         <td>
           <button type="button" class="submit-btn" style="padding:5px 10px;font-size:12px;" onclick="abrirModalEdicaoFormula('${f.id}')">Editar</button>
           <button type="button" class="submit-btn" style="padding:5px 10px;font-size:12px;background:var(--gold);margin-left:6px;" onclick="imprimirFormula('${f.id}')">Imprimir</button>
+          <button type="button" class="submit-btn" style="padding:5px 10px;font-size:12px;background:#2A5A7A;margin-left:6px;" onclick="imprimirEtiquetaFormula('${f.id}')">Etiqueta</button>
           <button type="button" class="submit-btn" style="padding:5px 10px;font-size:12px;background:var(--danger);margin-left:6px;" onclick="excluirFormula('${f.id}')">Excluir</button>
         </td>
       </tr>
@@ -2546,6 +2849,7 @@ async function abrirModalEdicaoFormula(id) {
   if (!f) return;
   await carregarProdutosParaSelect();
   await carregarClientesParaSelect();
+  await carregarTecnicosParaSelect();
 
   editandoFormulaId = f.id;
   document.getElementById("fe_nome").value = f.nome_formula || "";
@@ -2738,7 +3042,7 @@ async function imprimirFormula(id) {
         </tr>
         <tr>
           <td class="label">Artigo:</td>
-          <td class="valor">${escapeHtml(f.nome_formula) || ""}</td>
+          <td class="valor">${f.codigo ? "[" + escapeHtml(f.codigo) + "] " : ""}${escapeHtml(f.nome_formula) || ""}</td>
           <td class="label">Espessura(mm):</td>
           <td class="valor">${f.espessura ?? ""}</td>
         </tr>
@@ -2786,6 +3090,150 @@ async function imprimirFormula(id) {
 
 window.imprimirFormula = imprimirFormula;
 
+function imprimirEtiquetaFormula(id) {
+  const f = formulasCache.find(x => String(x.id) === String(id));
+  if (!f) return;
+
+  const win = window.open("", "_blank");
+
+  win.document.write(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8">
+      <title>Etiqueta — ${escapeHtml(f.nome_formula) || "Fórmula"}</title>
+      <style>
+        body{ font-family: Arial, sans-serif; padding:16px; color:#1E2A28; }
+        .etiqueta{
+          border:2px solid #1E2A28;
+          border-radius:8px;
+          padding:5px 5px;
+          max-width:220px;
+          gap:5px;
+          align-items: center;
+          display:Flex;
+          flex-direction: column;
+        }
+        
+        .etiqueta img {
+          width:130px;
+        }
+        .etiqueta .codigo{
+          font-size:22px;
+          margin-top:5px;
+          font-weight:bold;
+          letter-spacing:1px;
+          color:#0F3D33;
+          margin-bottom:6px;
+        }
+        
+        .etiqueta hr {
+        color:#0F3D33;
+        font-size:23px;
+        width:70%;
+        }
+        .etiqueta .nome{
+          font-size:22px;
+          font-weight:bold;
+          margin-bottom:10px;
+        }
+        .etiqueta .linha{
+          font-size:22px;
+          font-weight:bold;
+          color:#0F3D33;
+          margin-bottom:4px;
+        }
+        .etiqueta .linha strong{
+          text-transform:uppercase;
+          font-size:18px;
+          font-weight:bold;
+          color:#0F3D33;
+          display:inline-block;
+          width:60px;
+        }
+        @media print { body{ padding:0; } .etiqueta{ border:2px solid #000; } }
+      </style>
+    </head>
+    <body>
+      <div class="etiqueta">
+        <img src="https://raw.githubusercontent.com/Kairo0713/components-img/refs/heads/main/Lgo%20QMF.jpg" alt=""><hr>
+        ${f.codigo ? `<div class="codigo">${escapeHtml(f.codigo)}</div>` : ""}
+        <div class="nome">${escapeHtml(f.nome_formula) || "—"}</div>
+        <div class="linha"><strong>Cor:</strong>${escapeHtml(f.cor) || "—"}</div>
+      </div>
+    </body>
+    </html>
+  `);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 300);
+}
+
+window.imprimirEtiquetaFormula = imprimirEtiquetaFormula;
+
+document.getElementById("af_selecionar_todas").addEventListener("change", (e) => {
+  document.querySelectorAll(".chk-etiqueta-formula").forEach(chk => chk.checked = e.target.checked);
+});
+
+function imprimirEtiquetasEmMassa() {
+  const selecionadas = Array.from(document.querySelectorAll(".chk-etiqueta-formula:checked")).map(c => c.value);
+  if (!selecionadas.length) { alert("Selecione ao menos uma fórmula para imprimir as etiquetas."); return; }
+
+  const formulasSelecionadas = formulasCache.filter(f => selecionadas.includes(String(f.id)));
+
+  const etiquetasHtml = formulasSelecionadas.map(f => `
+    <div class="etiqueta">
+      <img src="https://raw.githubusercontent.com/Kairo0713/components-img/refs/heads/main/Lgo%20QMF.jpg" alt=""><hr>
+      ${f.codigo ? `<div class="codigo">${escapeHtml(f.codigo)}</div>` : ""}
+      <div class="nome">${escapeHtml(f.nome_formula) || "—"}</div>
+      <div class="linha"><strong>Cor:</strong>${escapeHtml(f.cor) || "—"}</div>
+    </div>
+  `).join("");
+
+  const win = window.open("", "_blank");
+  win.document.write(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8">
+      <title>Etiquetas — RK Inova</title>
+      <style>
+        body{ font-family: Arial, sans-serif; padding:16px; color:#1E2A28; }
+        .folha{ display:flex; flex-wrap:wrap; gap:12px; }
+        .etiqueta{
+          border:2px solid #1E2A28;
+          border-radius:8px;
+          padding:5px 5px;
+          width:220px;
+          gap:5px;
+          align-items:center;
+          display:flex;
+          flex-direction:column;
+          break-inside:avoid;
+          page-break-inside:avoid;
+        }
+        .etiqueta img{ width:130px; }
+        .etiqueta .codigo{ font-size:22px; margin-top:5px; font-weight:bold; letter-spacing:1px; color:#0F3D33; margin-bottom:6px; }
+        .etiqueta hr{ color:#0F3D33; font-size:23px; width:70%; }
+        .etiqueta .nome{ font-size:22px; font-weight:bold; margin-bottom:10px; text-align:center; }
+        .etiqueta .linha{ font-size:22px; font-weight:bold; color:#0F3D33; margin-bottom:4px; }
+        .etiqueta .linha strong{ text-transform:uppercase; font-size:18px; font-weight:bold; color:#0F3D33; display:inline-block; width:60px; }
+        @media print { body{ padding:0; } .etiqueta{ border:2px solid #000; } }
+      </style>
+    </head>
+    <body>
+      <div class="folha">${etiquetasHtml}</div>
+    </body>
+    </html>
+  `);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 300);
+}
+
+document.getElementById("btnImprimirEtiquetasMassa").addEventListener("click", imprimirEtiquetasEmMassa);
+window.imprimirEtiquetasEmMassa = imprimirEtiquetasEmMassa;
+
 document.getElementById("btnAddItemFormulaEdit").addEventListener("click", () => {
   criarEtapa(document.getElementById("itensFormulaEditContainer"), {}, "fe_peso_couro");
 });
@@ -2803,48 +3251,35 @@ window.excluirFormula = excluirFormula;
 const formServico = document.getElementById("formServico");
 const msgServico = document.getElementById("msgServico");
 
-formServico.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (!isConfigured) { showMsg(msgServico, "Configure o Supabase no código antes de salvar.", "err"); return; }
+let servicosCache = [];
+let editandoServicoId = null;
 
-  const btn = formServico.querySelector(".submit-btn");
-  btn.disabled = true;
-
-const payload = {
-    cliente_email: document.getElementById("s_email").value.trim(),
-    tipo_servico: document.getElementById("s_tipo").value.trim(),
-    data_servico: document.getElementById("s_data").value || null,
-    status: document.getElementById("s_status").value,
-    observacoes: document.getElementById("s_obs").value.trim() || null,
-    criado_por: nomeUsuarioAtual()
-  };
-
-  const { error } = await supabaseClient.from("servicos").insert([payload]);
-  btn.disabled = false;
-
-  if (error) {
-    showMsg(msgServico, "Erro ao salvar: " + error.message, "err");
-  } else {
-    showMsg(msgServico, "Serviço salvo com sucesso!", "ok");
-    formServico.reset();
-    loadServicos();
-  }
-});
 
 async function loadServicos() {
-  const tbody = document.getElementById("listServicos");
-  const data = await fetchTable("servicos");
-  if (!data.length) return renderEmpty(tbody, 6, "Nenhum serviço registrado ainda.");
-
+  servicosCache = await fetchTable("servicos");
   await carregarFormulasCache();
+  renderServicos();
+}
+
+function renderServicos() {
+  const tbody = document.getElementById("listServicos");
+  const termo = (document.getElementById("s_busca").value || "").toLowerCase().trim();
+
+  const data = !termo ? servicosCache : servicosCache.filter(s =>
+    (s.cliente_email || "").toLowerCase().includes(termo) ||
+    (s.tipo_servico || "").toLowerCase().includes(termo) ||
+    (s.status || "").toLowerCase().includes(termo)
+  );
+
+  if (!data.length) return renderEmpty(tbody, 7, termo ? "Nenhum serviço encontrado." : "Nenhum serviço registrado ainda.");
 
   tbody.innerHTML = data.map(s => {
     let formulaCol;
     if (s.formula_nome) {
       formulaCol = `
-        <span style="font-size:12px;">${escapeHtml(s.formula_nome)}</span><br>
-        <button type="button" class="submit-btn" style="padding:4px 8px;font-size:11px;margin-top:4px;" onclick="editarFormulaDoServico('${escapeHtml(s.formula_nome)}')">Editar fórmula</button>
-        <button type="button" class="submit-btn" style="padding:4px 8px;font-size:11px;margin-top:4px;background:var(--gold);" onclick="imprimirFormulaDoServico('${escapeHtml(s.formula_nome)}')">Imprimir fórmula</button>
+        <div style="font-size:12px;margin-bottom:4px;">${escapeHtml(s.formula_nome)}</div>
+        <button type="button" class="submit-btn" style="padding:4px 8px;font-size:11px;" onclick="editarFormulaDoServico('${escapeHtml(s.formula_nome)}')">Editar</button>
+        <button type="button" class="submit-btn" style="padding:4px 8px;font-size:11px;background:var(--gold);margin-left:4px;" onclick="imprimirFormulaDoServico('${escapeHtml(s.formula_nome)}')">Imprimir</button>
       `;
     } else {
       formulaCol = `
@@ -2863,10 +3298,85 @@ async function loadServicos() {
           ${s.observacoes ? `<button type="button" class="submit-btn" style="padding:2px 8px;font-size:11px;background:#5B6663;margin-top:4px;" onclick='abrirObservacao(${JSON.stringify(s.observacoes)})'>Ver mais</button>` : ""}
         </td>
         <td>${formulaCol}</td>
+        <td>
+          <button type="button" class="submit-btn" style="padding:5px 10px;font-size:12px;" onclick="abrirModalEdicaoServico('${s.id}')">Editar</button>
+          <button type="button" class="submit-btn" style="padding:5px 10px;font-size:12px;background:var(--danger);margin-left:6px;" onclick="excluirServico('${s.id}')">Excluir</button>
+        </td>
       </tr>
     `;
   }).join("");
 }
+
+function abrirModalEdicaoServico(id) {
+  const s = servicosCache.find(x => String(x.id) === String(id));
+  if (!s) return;
+  editandoServicoId = s.id;
+  document.getElementById("se_cliente").value = s.cliente_email || "";
+  document.getElementById("se_tipo").value = s.tipo_servico || "";
+  document.getElementById("se_data").value = s.data_servico || "";
+  document.getElementById("se_status").value = s.status || "Pendente";
+  document.getElementById("se_obs").value = s.observacoes || "";
+  document.getElementById("msgEdicaoServico").className = "msg";
+  document.getElementById("modalOverlayServico").style.display = "flex";
+}
+
+function fecharModalEdicaoServico() {
+  editandoServicoId = null;
+  document.getElementById("modalOverlayServico").style.display = "none";
+}
+
+async function salvarEdicaoServico() {
+  const msgEl = document.getElementById("msgEdicaoServico");
+  const btn = document.getElementById("btnSalvarEdicaoServico");
+  const cliente = document.getElementById("se_cliente").value.trim();
+  const tipo = document.getElementById("se_tipo").value.trim();
+
+  if (!cliente || !tipo) {
+    showMsg(msgEl, "Cliente e tipo de serviço são obrigatórios.", "err");
+    return;
+  }
+
+  const payload = {
+    cliente_email: cliente,
+    tipo_servico: tipo,
+    data_servico: document.getElementById("se_data").value || null,
+    status: document.getElementById("se_status").value,
+    observacoes: document.getElementById("se_obs").value.trim() || null,
+    editado_por: nomeUsuarioAtual(),
+    ultima_edicao: new Date().toISOString()
+  };
+
+  btn.disabled = true;
+  const { error } = await supabaseClient.from("servicos").update(payload).eq("id", editandoServicoId);
+  btn.disabled = false;
+
+  if (error) {
+    showMsg(msgEl, "Erro ao salvar: " + error.message, "err");
+  } else {
+    fecharModalEdicaoServico();
+    loadServicos();
+  }
+}
+
+async function excluirServico(id) {
+  if (!confirm("Tem certeza que deseja excluir este serviço?")) return;
+  const { error } = await supabaseClient.from("servicos").delete().eq("id", id);
+  if (error) {
+    alert("Erro ao excluir: " + error.message);
+  } else {
+    loadServicos();
+  }
+}
+
+document.getElementById("s_busca").addEventListener("input", renderServicos);
+document.getElementById("btnSalvarEdicaoServico").addEventListener("click", salvarEdicaoServico);
+document.getElementById("btnCancelarEdicaoServico").addEventListener("click", fecharModalEdicaoServico);
+document.getElementById("modalOverlayServico").addEventListener("click", (e) => {
+  if (e.target.id === "modalOverlayServico") fecharModalEdicaoServico();
+});
+
+window.abrirModalEdicaoServico = abrirModalEdicaoServico;
+window.excluirServico = excluirServico;
 
 function editarFormulaDoServico(nomeFormula) {
   const f = formulasCache.find(x => x.nome_formula === nomeFormula);
@@ -3220,6 +3730,9 @@ document.getElementById("hist_busca").addEventListener("input", renderHistorico)
 
 /* ---------------- Relatórios ---------------- */
 
+let relDetalheTrabalhosPorTecnico = {};
+let relDetalheTrabalhosPorMes = {};
+
 function countBy(rows, field) {
   const counts = {};
   rows.forEach(r => {
@@ -3302,13 +3815,35 @@ async function loadRelatorios() {
   const solicitacoesClienteCounts = countBy(solicitacoes, "cliente");
   renderContagemTabela("listSolicitacoesPorCliente", solicitacoesClienteCounts, 2, "Nenhuma solicitação encontrada no período.");
 
-  // Trabalhos por técnico (baseado nas solicitações, que têm o campo "tecnico")
-  const trabalhosTecnicoCounts = countBy(solicitacoes, "tecnico");
-  renderContagemTabela("listTrabalhosPorTecnico", trabalhosTecnicoCounts, 2, "Nenhum trabalho encontrado no período.");
+  // Trabalhos por técnico (somente solicitações concluídas de clientes com técnico vinculado)
+  const trabalhosConcluidosComTecnico = solicitacoes.filter(s =>
+    s.status === "Concluído" && s.cliente && s.tecnico
+  );
+  const trabalhosTecnicoCounts = countBy(trabalhosConcluidosComTecnico, "tecnico");
+  renderContagemTabela("listTrabalhosPorTecnico", trabalhosTecnicoCounts, 2, "Nenhum trabalho concluído encontrado no período.");
+
+  // Guarda clientes por técnico, usado só na impressão desse relatório
+  relDetalheTrabalhosPorTecnico = {};
+  trabalhosConcluidosComTecnico.forEach(s => {
+    if (!relDetalheTrabalhosPorTecnico[s.tecnico]) relDetalheTrabalhosPorTecnico[s.tecnico] = {};
+    relDetalheTrabalhosPorTecnico[s.tecnico][s.cliente] = (relDetalheTrabalhosPorTecnico[s.tecnico][s.cliente] || 0) + 1;
+  });
 
   // Trabalhos no mês (baseado nos serviços, por data_servico ou created_at)
   const trabalhosMesCounts = countByMes(servicos, "data_servico", "created_at");
   renderContagemTabela("listTrabalhosPorMes", trabalhosMesCounts, 2, "Nenhum trabalho encontrado no período.");
+
+  // Guarda datas detalhadas por mês, usado só na impressão desse relatório
+  relDetalheTrabalhosPorMes = {};
+  servicos.forEach(s => {
+    const dataRef = s.data_servico || s.created_at;
+    if (!dataRef) return;
+    const d = new Date(dataRef);
+    const mesLabel = String(d.getMonth() + 1).padStart(2, "0") + "/" + d.getFullYear();
+    const dataLabel = formatDate(dataRef);
+    if (!relDetalheTrabalhosPorMes[mesLabel]) relDetalheTrabalhosPorMes[mesLabel] = {};
+    relDetalheTrabalhosPorMes[mesLabel][dataLabel] = (relDetalheTrabalhosPorMes[mesLabel][dataLabel] || 0) + 1;
+  });
 
   // Serviços por status
   const servicosStatusCounts = countBy(servicos, "status");
@@ -3330,6 +3865,111 @@ document.getElementById("btnLimparFiltroRelatorio").addEventListener("click", ()
   loadRelatorios();
 });
 
+function imprimirRelatorio(titulo, tbodyId, rotuloColuna) {
+  const inicio = document.getElementById("rel_data_inicio").value;
+  const fim = document.getElementById("rel_data_fim").value;
+  const periodoTexto = (inicio || fim)
+    ? "Período: " + (inicio ? formatDate(inicio) : "início") + " até " + (fim ? formatDate(fim) : "hoje")
+    : "Todos os registros";
+
+  let tabelaHtml;
+
+  if (tbodyId === "listTrabalhosPorTecnico") {
+    // Relatório especial: técnico + total, com os clientes detalhados abaixo
+    const tecnicos = Object.keys(relDetalheTrabalhosPorTecnico).sort((a, b) => {
+      const totalA = Object.values(relDetalheTrabalhosPorTecnico[a]).reduce((s, n) => s + n, 0);
+      const totalB = Object.values(relDetalheTrabalhosPorTecnico[b]).reduce((s, n) => s + n, 0);
+      return totalB - totalA;
+    });
+
+    tabelaHtml = tecnicos.length ? tecnicos.map(tec => {
+      const clientes = relDetalheTrabalhosPorTecnico[tec];
+      const total = Object.values(clientes).reduce((s, n) => s + n, 0);
+      const linhasClientes = Object.entries(clientes)
+        .sort((a, b) => b[1] - a[1])
+        .map(([cliente, qtd]) => `<tr><td class="linha-cliente">${cliente}</td><td>${qtd}</td></tr>`)
+        .join("");
+
+      return `
+        <table class="print-table" style="margin-bottom:18px;">
+          <thead><tr><th>${tec}</th><th>${total}</th></tr></thead>
+          <tbody>${linhasClientes}</tbody>
+        </table>
+      `;
+    }).join("") : "<p>Nenhum dado disponível para este relatório.</p>";
+  } else if (tbodyId === "listTrabalhosPorMes") {
+    // Relatório especial: cabeçalho fixo "Mês", com o mês real e as datas detalhadas no corpo
+    const meses = Object.keys(relDetalheTrabalhosPorMes).sort((a, b) => {
+      const [ma, ya] = a.split("/").map(Number);
+      const [mb, yb] = b.split("/").map(Number);
+      return new Date(ya, ma - 1) - new Date(yb, mb - 1);
+    });
+
+    tabelaHtml = meses.length ? meses.map(mes => {
+      const datas = relDetalheTrabalhosPorMes[mes];
+      const total = Object.values(datas).reduce((s, n) => s + n, 0);
+      const linhasDatas = Object.entries(datas)
+        .sort((a, b) => {
+          const [da, ma, ya] = a[0].split("/").map(Number);
+          const [db, mb, yb] = b[0].split("/").map(Number);
+          return new Date(ya, ma - 1, da) - new Date(yb, mb - 1, db);
+        })
+        .map(([data, qtd]) => `<tr><td class="linha-cliente">${data}</td><td>${qtd}</td></tr>`)
+        .join("");
+
+      return `
+        <table class="print-table" style="margin-bottom:18px;">
+          <thead><tr><th>Mês</th><th>Qtd.</th></tr></thead>
+          <tbody>
+            <tr><td><strong>${mes}</strong></td><td><strong>${total}</strong></td></tr>
+          </tbody>
+        </table>
+      `;
+    }).join("") : "<p>Nenhum dado disponível para este relatório.</p>";
+  } else {
+    // Relatório padrão: lê direto da tabela já renderizada
+    const tbody = document.getElementById(tbodyId);
+    const linhas = Array.from(tbody.querySelectorAll("tr"))
+      .filter(tr => !tr.classList.contains("empty-row"))
+      .map(tr => {
+        const cols = tr.querySelectorAll("td");
+        return `<tr><td>${cols[0].textContent}</td><td>${cols[1].textContent}</td></tr>`;
+      }).join("");
+
+tabelaHtml = linhas
+      ? `<table class="print-table"><thead><tr><th>${rotuloColuna || "Item"}</th><th>Qtd.</th></tr></thead><tbody>${linhas}</tbody></table>`
+      : "<p>Nenhum dado disponível para este relatório.</p>";
+  }
+  const win = window.open("", "_blank");
+  win.document.write(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8">
+      <title>${titulo} — RK Inova</title>
+      <style>
+        body{ font-family: Arial, sans-serif; padding:20px; color:#1E2A28; }
+        h1{ font-size:19px; margin-bottom:2px; }
+        .subtitulo{ color:#5B6663; font-size:13px; margin-bottom:20px; }
+        table.print-table{ width:100%; border-collapse:collapse; font-size:12px; }
+        table.print-table th, table.print-table td{ border:1px solid #999; padding:5px 8px; text-align:left; }
+        table.print-table th{ background:#f0f0f0; font-weight:bold; }
+        table.print-table td.linha-cliente{ padding-left:20px; color:#5B6663; }
+        @media print { body{ padding:10px; } }
+      </style>
+    </head>
+    <body>
+      <h1>${titulo}</h1>
+      <p class="subtitulo">${periodoTexto} · Gerado em ${new Date().toLocaleString("pt-BR")}</p>
+      ${tabelaHtml}
+    </body>
+    </html>
+  `);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 300);
+}
+window.imprimirRelatorio = imprimirRelatorio;
 function renderCheckboxesAbas(userId, permitidas, role) {
   if (role === "admin") {
     return `<span style="font-size:11px;color:#8A938F;">Acesso total (admin)</span>`;
