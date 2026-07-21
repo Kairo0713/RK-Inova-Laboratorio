@@ -177,6 +177,36 @@
     transition:border-color .15s ease, background .15s ease;
   }
 
+  .dropdown-list{
+  display:none;
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:#fff;
+  border:1px solid var(--line);
+  border-top:none;
+  border-radius:0 0 8px 8px;
+  max-height:200px;
+  overflow-y:auto;
+  z-index:50;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+.dropdown-list.show{ display:block; }
+.dropdown-list .dropdown-item{
+  padding:9px 12px;
+  font-size:13.5px;
+  cursor:pointer;
+  color:var(--ink);
+}
+.dropdown-list .dropdown-item:hover{ background:#FCF3DE; }
+.dropdown-list .dropdown-empty{
+  padding:9px 12px;
+  font-size:12.5px;
+  color:#8A938F;
+  font-style:italic;
+}
+
   .field textarea{
     resize:vertical;
     min-height:70px;
@@ -400,6 +430,7 @@
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:14px;
+    margin-top:50px;
     margin-bottom:28px;
   }
 
@@ -1114,21 +1145,46 @@
     O SQL completo das tabelas está nos comentários do código.
   </div>
 
-  <!-- ================= DASHBOARD ================= -->
-  <div class="panel active" id="panel-dashboard">
-    <h2>Dashboard</h2>
-    <p class="hint">Visão geral.</p>
-
-    <div class="card-grid">
-      <div class="card"><div class="card-num" id="cardClientes">–</div><div class="card-label">Clientes</div></div>
-      <div class="card"><div class="card-num" id="cardProdutos">–</div><div class="card-label">Produtos</div></div>
-      <div class="card"><div class="card-num" id="cardServicos">–</div><div class="card-label">Serviços</div></div>
-    </div>
-
-    <div class="chart-box">
-      <canvas id="dashboardChart"></canvas>
+<!-- ================= DASHBOARD ================= -->
+<div class="panel active" id="panel-dashboard">
+  <h2>Dashboard</h2>
+  <p class="hint">Visão geral do laboratório.</p>
+    <div class="list-section" style="margin-top:0;padding-top:0;border-top:none;">
+      <h3>🏆 Clientes que mais solicitaram</h3>
+      <div id="dashboardRankingClientes">
+      <div class="historico-item"><span>Carregando…</span></div>
     </div>
   </div>
+  <div class="card-grid">
+    <div class="card"><div class="card-num" id="cardClientes">–</div><div class="card-label">Clientes</div></div>
+    <div class="card"><div class="card-num" id="cardFormulas">–</div><div class="card-label">Fórmulas</div></div>
+    <div class="card"><div class="card-num" id="cardServicosAndamento">–</div><div class="card-label">Serviços em andamento</div></div>
+    <div class="card"><div class="card-num" id="cardSolPendentes">–</div><div class="card-label">Solicitações pendentes</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h3 style="font-size:13px;text-transform:uppercase;letter-spacing:0.4px;color:#5B6663;margin:0 0 12px 0;">Serviços por status</h3>
+      <canvas id="chartServicosStatus"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3 style="font-size:13px;text-transform:uppercase;letter-spacing:0.4px;color:#5B6663;margin:0 0 12px 0;">Solicitações por urgência</h3>
+      <canvas id="chartSolicitacoesUrgencia"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <h3 style="font-size:13px;text-transform:uppercase;letter-spacing:0.4px;color:#5B6663;margin:0 0 12px 0;">Fórmulas cadastradas por mês</h3>
+    <canvas id="chartFormulasMes"></canvas>
+  </div>
+
+  <div class="list-section">
+    <h3>Atividade recente</h3>
+    <div id="dashboardAtividadeRecente">
+      <div class="historico-item"><span>Carregando…</span></div>
+    </div>
+  </div>
+</div>
 
   <!-- ================= CLIENTE ================= -->
   <div class="panel" id="panel-cliente">
@@ -1437,21 +1493,22 @@
 
     <form id="formSolicitacao">
       <div class="row-2">
-        <div class="field">
-          <label for="sol_tecnico">Seu nome</label>
-          <input type="text" id="sol_tecnico" list="listaTecnicosSolDatalist" required placeholder="Digite para buscar um técnico...">
-        </div>
-        <div class="field">
-          <label for="sol_cliente">Cliente</label>
-          <input type="text" id="sol_cliente" placeholder="Ex: Curtume Silva">
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="sol_formula">Fórmula relacionada</label>
-        <input type="text" id="sol_formula" list="listaFormulasSolDatalist" placeholder="Digite para buscar uma fórmula (opcional)...">
-      </div>
-
+  <div class="field" style="position:relative;">
+    <label for="sol_tecnico">Técnico</label>
+    <input type="text" id="sol_tecnico" autocomplete="off" required placeholder="Digite para buscar um técnico...">
+    <div class="dropdown-list" id="sol_tecnico_dropdown"></div>
+  </div>
+  <div class="field" style="position:relative;">
+    <label for="sol_cliente">Cliente</label>
+    <input type="text" id="sol_cliente" autocomplete="off" placeholder="Digite para buscar um cliente...">
+    <div class="dropdown-list" id="sol_cliente_dropdown"></div>
+  </div>
+</div>
+<div class="field" style="position:relative;">
+  <label for="sol_formula">Fórmula relacionada</label>
+  <input type="text" id="sol_formula" autocomplete="off" placeholder="Digite para buscar uma fórmula (opcional)...">
+  <div class="dropdown-list" id="sol_formula_dropdown"></div>
+</div>
       <div class="row-2">
         <div class="field">
           <label for="sol_tipo">Tipo de solicitação</label>
@@ -1748,6 +1805,41 @@ function fecharMenuMobile() {
 
 if (btnAbrirMenuMobile) btnAbrirMenuMobile.addEventListener("click", abrirMenuMobile);
 if (mobileBackdrop) mobileBackdrop.addEventListener("click", fecharMenuMobile);
+
+
+function initSearchableDropdown(inputId, dropdownId, getItems, onSelect) {
+  const input = document.getElementById(inputId);
+  const dropdown = document.getElementById(dropdownId);
+  if (!input || !dropdown) return;
+
+  function render(filtro) {
+    const termo = (filtro || "").toLowerCase().trim();
+    const itens = getItems().filter(nome => nome.toLowerCase().includes(termo));
+    dropdown.innerHTML = itens.length
+      ? itens.map(nome => `<div class="dropdown-item">${escapeHtml(nome)}</div>`).join("")
+      : `<div class="dropdown-empty">Nenhum resultado encontrado</div>`;
+    dropdown.classList.add("show");
+  }
+
+  input.addEventListener("focus", () => render(input.value));
+  input.addEventListener("input", () => render(input.value));
+
+  dropdown.addEventListener("mousedown", (e) => {
+    const item = e.target.closest(".dropdown-item");
+    if (!item) return;
+    input.value = item.textContent;
+    dropdown.classList.remove("show");
+    if (onSelect) onSelect(item.textContent);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target !== input && !dropdown.contains(e.target)) {
+      dropdown.classList.remove("show");
+    }
+  });
+}
+
+
 
 /* ---------------- Helpers ---------------- */
 function showMsg(el, text, type) {
@@ -3423,15 +3515,33 @@ const msgSolicitacao = document.getElementById("msgSolicitacao");
 let solicitacoesCache = [];
 
 async function populateFormulaSelectSolicitacao() {
-  const datalist = document.getElementById("listaFormulasSolDatalist");
-  const data = await fetchTable("formulas", "nome_formula", true);
-  datalist.innerHTML = data.map(f => `<option value="${escapeHtml(f.nome_formula)}">`).join("");
+  const [formulas, clientes] = await Promise.all([
+    fetchTable("formulas", "nome_formula", true),
+    fetchTable("clientes", "nome", true)
+  ]);
+
+  const mapaClientes = {};
+  clientes.forEach(c => { mapaClientes[c.id] = c.nome; });
+
+  solFormulasCache = formulas.map(f => ({
+    nome: f.nome_formula,
+    clienteNome: f.cliente_id ? (mapaClientes[f.cliente_id] || null) : null
+  }));
 }
 
+let solTecnicosCache = [];
+let solClientesCache = [];
+let solFormulasCache = [];
+
 async function populateTecnicoDatalistSolicitacao() {
-  const datalist = document.getElementById("listaTecnicosSolDatalist");
   const data = await fetchTable("tecnicos", "nome", true);
-  datalist.innerHTML = data.map(t => `<option value="${escapeHtml(t.nome)}">`).join("");
+  solTecnicosCache = data.map(t => t.nome);
+}
+
+
+async function populateClientesSolicitacao() {
+  const data = await fetchTable("clientes", "nome", true);
+  solClientesCache = data.map(c => c.nome);
 }
 
 formSolicitacao.addEventListener("submit", async (e) => {
@@ -3469,10 +3579,10 @@ formSolicitacao.addEventListener("submit", async (e) => {
 async function loadSolicitacoes() {
   await populateFormulaSelectSolicitacao();
   await populateTecnicoDatalistSolicitacao();
+  await populateClientesSolicitacao();
   solicitacoesCache = await fetchTable("solicitacoes");
   renderSolicitacoes();
 }
-
 function urgenciaClass(u) {
   return u === "Urgente" ? "urgente" : "normal";
 }
@@ -3590,6 +3700,14 @@ document.getElementById("btnNovaSolicitacao").addEventListener("click", () => {
   document.getElementById("formSolicitacaoWrapper").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
+initSearchableDropdown("sol_tecnico", "sol_tecnico_dropdown", () => solTecnicosCache);
+initSearchableDropdown("sol_cliente", "sol_cliente_dropdown", () => solClientesCache);
+initSearchableDropdown("sol_formula", "sol_formula_dropdown", getFormulasFiltradasPorCliente);
+
+document.getElementById("sol_cliente").addEventListener("input", () => {
+  document.getElementById("sol_formula").value = "";
+});
+
 document.getElementById("btnCancelarNovaSolicitacao").addEventListener("click", () => {
   formSolicitacao.reset();
   document.getElementById("msgSolicitacao").className = "msg";
@@ -3599,46 +3717,154 @@ document.getElementById("btnCancelarNovaSolicitacao").addEventListener("click", 
 window.mudarStatusSolicitacao = mudarStatusSolicitacao;
 window.excluirSolicitacao = excluirSolicitacao;
 
+function getFormulasFiltradasPorCliente() {
+  const clienteAtual = document.getElementById("sol_cliente").value.trim().toLowerCase();
+
+  // Sem cliente digitado: mostra todas as fórmulas
+  if (!clienteAtual) return solFormulasCache.map(f => f.nome);
+
+  // Só filtra se o texto digitado bate com um cliente cadastrado de verdade
+  const clienteExiste = solClientesCache.some(nome => nome.toLowerCase() === clienteAtual);
+  if (!clienteExiste) return solFormulasCache.map(f => f.nome);
+
+  return solFormulasCache
+    .filter(f => (f.clienteNome || "").toLowerCase() === clienteAtual)
+    .map(f => f.nome);
+}
 
 /* ---------------- Dashboard ---------------- */
-let dashboardChartInstance = null;
+let chartServicosStatusInstance = null;
+let chartSolicitacoesUrgenciaInstance = null;
+let chartFormulasMesInstance = null;
+
+function upsertChart(instanciaAtual, ctxId, config) {
+  const ctx = document.getElementById(ctxId).getContext("2d");
+  if (instanciaAtual) {
+    instanciaAtual.data = config.data;
+    instanciaAtual.options = config.options;
+    instanciaAtual.update();
+    return instanciaAtual;
+  }
+  return new Chart(ctx, config);
+}
 
 async function loadDashboard() {
   if (!isConfigured) return;
 
-  const [nClientes, nProdutos, nServicos] = await Promise.all([
-    countTable("clientes"), countTable("produtos"), countTable("servicos")
+  const [clientes, formulas, servicos, solicitacoes] = await Promise.all([
+    fetchTable("clientes"),
+    fetchTable("formulas"),
+    fetchTable("servicos"),
+    fetchTable("solicitacoes")
   ]);
 
-  document.getElementById("cardClientes").textContent = nClientes;
-  document.getElementById("cardProdutos").textContent = nProdutos;
-  document.getElementById("cardServicos").textContent = nServicos;
+  /* --- Ranking: clientes que mais solicitaram --- */
+  const solicitacoesComCliente = solicitacoes.filter(s => s.cliente);
+  const rankingCounts = countBy(solicitacoesComCliente, "cliente");
+  const rankingOrdenado = Object.entries(rankingCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
 
-  const ctx = document.getElementById("dashboardChart").getContext("2d");
-  const chartData = {
-    labels: ["Clientes", "Produtos", "Serviços"],
-    datasets: [{
-      label: "Total de registros",
-      data: [nClientes, nProdutos, nServicos],
-      backgroundColor: ["#afd4f9", "#afd4f9", "#afd4f9"],
-      borderRadius: 4
-    }]
-  };
-
-  if (dashboardChartInstance) {
-    dashboardChartInstance.data = chartData;
-    dashboardChartInstance.update();
+  const rankingEl = document.getElementById("dashboardRankingClientes");
+  if (!rankingOrdenado.length) {
+    rankingEl.innerHTML = `<div class="historico-item"><span>Nenhuma solicitação com cliente vinculado ainda.</span></div>`;
   } else {
-    dashboardChartInstance = new Chart(ctx, {
-      type: "bar",
-      data: chartData,
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
-      }
-    });
+    const medalhas = ["🥇", "🥈", "🥉"];
+    rankingEl.innerHTML = rankingOrdenado.map(([cliente, qtd], idx) => `
+      <div class="historico-item">
+        <span class="h-tag">${medalhas[idx] || (idx + 1) + "º"}</span>
+        <span style="flex:1;">${escapeHtml(cliente)}</span>
+        <span style="font-weight:600;color:var(--pine);">${qtd} solicitaç${qtd === 1 ? "ão" : "ões"}</span>
+      </div>
+    `).join("");
   }
+
+  /* --- Cards --- */
+  const servicosAndamento = servicos.filter(s => s.status === "Em andamento").length;
+  const solPendentes = solicitacoes.filter(s => s.status === "Pendente").length;
+
+  document.getElementById("cardClientes").textContent = clientes.length;
+  document.getElementById("cardFormulas").textContent = formulas.length;
+  document.getElementById("cardServicosAndamento").textContent = servicosAndamento;
+  document.getElementById("cardSolPendentes").textContent = solPendentes;
+
+  /* --- Gráfico: Serviços por status --- */
+  const statusCounts = countBy(servicos, "status");
+  chartServicosStatusInstance = upsertChart(chartServicosStatusInstance, "chartServicosStatus", {
+    type: "doughnut",
+    data: {
+      labels: Object.keys(statusCounts),
+      datasets: [{
+        data: Object.values(statusCounts),
+        backgroundColor: ["#afd4f9", "#f9e0af", "#afd9c1", "#f2afaf", "#cbafD9"]
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+  });
+
+  /* --- Gráfico: Solicitações por urgência --- */
+  const urgenciaCounts = countBy(solicitacoes, "urgencia");
+  chartSolicitacoesUrgenciaInstance = upsertChart(chartSolicitacoesUrgenciaInstance, "chartSolicitacoesUrgencia", {
+    type: "bar",
+    data: {
+      labels: Object.keys(urgenciaCounts),
+      datasets: [{
+        label: "Solicitações",
+        data: Object.values(urgenciaCounts),
+        backgroundColor: Object.keys(urgenciaCounts).map(u => u === "Urgente" ? "#A33A2E" : "#afd4f9"),
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
+
+  /* --- Gráfico: Fórmulas cadastradas por mês --- */
+  const formulasMesCounts = countByMes(formulas, "created_at", null);
+  chartFormulasMesInstance = upsertChart(chartFormulasMesInstance, "chartFormulasMes", {
+    type: "line",
+    data: {
+      labels: Object.keys(formulasMesCounts),
+      datasets: [{
+        label: "Fórmulas cadastradas",
+        data: Object.values(formulasMesCounts),
+        borderColor: "#1B5A4B",
+        backgroundColor: "rgba(27,90,75,0.15)",
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
+
+  /* --- Atividade recente (mistura de várias áreas) --- */
+  const recentes = [
+    ...clientes.map(c => ({ tag: "Cliente", date: c.created_at, text: `Novo cliente: ${c.nome}` })),
+    ...formulas.map(f => ({ tag: "Fórmula", date: f.created_at, text: `Fórmula registrada: ${f.nome_formula}` })),
+    ...servicos.map(s => ({ tag: "Serviço", date: s.created_at, text: `${s.tipo_servico} — ${s.cliente_email} (${s.status})` })),
+    ...solicitacoes.map(s => ({ tag: "Solicitação", date: s.created_at, text: `${s.tipo} — ${s.tecnico}${s.cliente ? " / " + s.cliente : ""} (${s.status})` }))
+  ]
+    .filter(i => i.date)
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 8);
+
+  const feedEl = document.getElementById("dashboardAtividadeRecente");
+  feedEl.innerHTML = recentes.length
+    ? recentes.map(i => `
+        <div class="historico-item">
+          <span class="h-tag">${escapeHtml(i.tag)}</span>
+          <span class="h-date">${formatDate(i.date)}</span>
+          <span>${escapeHtml(i.text)}</span>
+        </div>
+      `).join("")
+    : `<div class="historico-item"><span>Nenhuma atividade registrada ainda.</span></div>`;
 }
 
 /* ---------------- Histórico ---------------- */
